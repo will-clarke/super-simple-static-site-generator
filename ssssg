@@ -112,4 +112,11 @@ generate_rss_feed() {
     echo "</channel></rss>"
 }
 
+if [ $# -gt 0 ]; then
+    echo "Usage: ssssg"
+    echo "  No need to pass any arguments in."
+    echo "  Read the README.md from  https://git.sr.ht/~will-clarke/super-simple-static-site-generator for more information."
+    exit 1
+fi
+
 main
