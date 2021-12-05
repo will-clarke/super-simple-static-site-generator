@@ -44,6 +44,7 @@ md_file_to_html_file() {
     input_file="$1"
     pandoc \
         --css="/css/style.css" \
+        --highlight-style zenburn \
         --include-before-body src/_top.html \
         --include-after-body src/_bottom.html \
         --title "$(config_for title)" \
