@@ -22,7 +22,7 @@ I took heavy inspiration for this script from [ssg](https://www.romanzolotarev.c
 - It's not very SEO-friendly. No sitemap. No opengraph tags.
 - It's kind of slow. We delete and regenerate all pages and tags each time.
 
-## How To:
+## File structure
 
 This script assumes a file structure as follows:
 
@@ -38,10 +38,34 @@ This script assumes a file structure as follows:
 
 ```
 - This structure isn't 100% necessary, but recommended.
+- You can put any files in any directory (including the top-level)
+- Posts should go in the `src/posts` directory. Special logic happens to posts (tags and a list of posts by date).
 - You can chuck whatever CSS you want into the `src/css` directory.
-- Posts should go in the `src/posts` directory.
 - the `src/_{top,bottom}.html` files are optional but useful for making sites look half-decent.
 
+## Post structure
+
+You should write your posts in markdown.
+Frontmatter is a vital part of how this script works. Each post should have these frontmatter fields:
+
+`date` `title` `description` `tags`
+
+An example
+
+``` sh
+---
+date: 2022-01-01
+title: An example post title
+description: This is a super cool way to generate static stites
+tags: ssssg simple web
+---
+
+.. the rest of the md document..
+```
+
+The rest of the post should be in markdown.
+
+## Example
 Here's an example script to get you up and running. 
 Alternatively you can look at https://git.sr.ht/~will-clarke/blog for inspiration.
 
@@ -77,5 +101,6 @@ echo "<h1>Hey everyone</h1>
 </nav>" > src/_top.html
 echo "<footer>That's all Folks!</footer>" > src/_bottom.html
 echo "h1 {color: red;}" > src/css/style.css
+
 ./ssssg
 ```
