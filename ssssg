@@ -77,7 +77,7 @@ generate_tmp_files() {
 
         # Add a heading from every post into the index.md / posts.md
         # and generate all our tags
-        printf "# [%s](%s)\n%s\n%s\n\n" "$title" "$dst_path" "$description" "$linked_tags" >> tmp/index.md
+        printf "## [%s](%s)\n%s\n%s\n\n" "$title" "$dst_path" "$description" "$linked_tags" >> tmp/index.md
         printf -- "- *%s* [%s](%s)\n\n" "$post_date" "$title" "$dst_path" >> tmp/posts.md
         echo "$split_tags" | xargs -I "{tag}" sh -c "echo \"- *[$title](/$dst_path)* $post_date\" >> tmp/tags/{tag}.md"
         if [ -n "$linked_tags" ]; then
