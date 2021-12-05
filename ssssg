@@ -1,4 +1,9 @@
 #!/bin/sh
+#
+# Super Simple Static Site Generator
+#
+# This script will abuse pandoc to create
+# a fabulous bare-bones static site.
 
 main() {
     # Some housekeeping that's probably not 100% necessary
