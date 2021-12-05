@@ -1,9 +1,10 @@
 #!/bin/sh
 
 main() {
-    # Some housekeeping...
-    rm -rf dst tmp && mkdir -p src dst/posts dst/tags tmp/tags tmp/posts
-    touch src/config.yaml
+    # Some housekeeping that's probably not 100% necessary
+    rm -rf dst tmp && mkdir -p src/css src/posts \
+        dst/posts dst/tags tmp/tags tmp/posts
+    touch src/config.yaml src/_top.html src/_bottom.html
 
     # Generate tmp/posts/*.md, tmp/index.md, tmp/posts.md, tmp/tags.md,
     # tmp/tags/example-tag.md files, using our posts as a source

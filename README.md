@@ -21,3 +21,61 @@ I took heavy inspiration for this script from [ssg](https://www.romanzolotarev.c
 
 - It's not very SEO-friendly. No sitemap. No opengraph tags.
 - It's kind of slow. We delete and regenerate all pages and tags each time.
+
+## How To:
+
+This script assumes a file structure as follows:
+
+``` sh
+├── src
+│   ├── _bottom.html
+│   ├── _top.html
+│   ├── css
+│   │   └── style.css
+│   └── posts
+│       ├── 2021-01-01--an-example-post.md
+│       └── 2022-01-01--a-cloned-post-to-show-tags.md
+
+```
+- This structure isn't 100% necessary, but recommended.
+- You can chuck whatever CSS you want into the `src/css` directory.
+- Posts should go in the `src/posts` directory.
+- the `src/_{top,bottom}.html` files are optional but useful for making sites look half-decent.
+
+Here's an example script to get you up and running. 
+Alternatively you can look at https://git.sr.ht/~will-clarke/blog for inspiration.
+
+``` sh
+mkdir -p src/posts src/css
+
+echo "---
+date: 2022-01-01
+title: An example post title
+description: This is a super cool way to generate static stites
+tags: ssssg simple web
+---
+
+Here's the actual Markdown content
+- nice
+" | tee \
+    src/posts/2021-01-01--an-example-post.md \
+    src/posts/2022-01-01--a-cloned-post-to-show-tags.md
+
+echo "
+---
+title: All about me
+---
+
+Some self-centered ramblings
+" > src/about.md
+
+echo "<h1>Hey everyone</h1>
+<nav>
+<a href=\"/about.html\">about</a>
+<a href=\"/tags.html\">tags</a>
+<a href=\"/posts.html\">posts</a>
+</nav>" > src/_top.html
+echo "<footer>That's all Folks!</footer>" > src/_bottom.html
+echo "h1 {color: red;}" > src/css/style.css
+./ssssg
+```
