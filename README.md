@@ -30,6 +30,7 @@ This script assumes a file structure as follows:
 ├── src
 │   ├── _bottom.html
 │   ├── _top.html
+│   ├── config.yaml
 │   ├── css
 │   │   └── style.css
 │   └── posts
@@ -37,11 +38,12 @@ This script assumes a file structure as follows:
 │       └── 2022-01-01--a-cloned-post-to-show-tags.md
 
 ```
+
 - This structure isn't 100% necessary, but recommended.
 - You can put any files in any directory (including the top-level)
 - Posts should go in the `src/posts` directory. Special logic happens to posts (tags and a list of posts by date).
 - You can chuck whatever CSS you want into the `src/css` directory.
-- the `src/_{top,bottom}.html` files are optional but useful for making sites look half-decent.
+- the `src/_{header,top,bottom}.html` files are optional but useful for making sites look half-decent.
 
 ## Post structure
 
@@ -52,7 +54,7 @@ Frontmatter is a vital part of how this script works. Each post should have thes
 
 An example
 
-``` sh
+```sh
 ---
 date: 2022-01-01
 title: An example post title
@@ -64,6 +66,19 @@ tags: ssssg simple web
 ```
 
 The rest of the post should be in markdown.
+
+## Config structure
+
+The `src/config.yaml` file contains extra variables that you may want built into the site.
+For example, take a look at mine:
+
+```yaml
+base_url: https://wclarke.net
+index_md: Hello!👋😃\n\nI'm a software engineer based in the UK.
+title: 🚀 Will Clarke
+rss_title: Will Clarke's Blog
+rss_description: Some random ramblings of a sleep-deprived software engineer
+```
 
 ## Example
 Here's an example script to get you up and running. 

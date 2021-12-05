@@ -9,7 +9,7 @@ main() {
     # Some housekeeping that's probably not 100% necessary
     rm -rf dst tmp && mkdir -p src/css src/posts \
         dst/posts dst/tags tmp/tags tmp/posts
-    touch src/config.yaml src/_top.html src/_bottom.html
+    touch src/config.yaml src/_top.html src/_bottom.html src/_header.html
 
     # Generate tmp/posts/*.md, tmp/index.md, tmp/posts.md, tmp/tags.md,
     # tmp/tags/example-tag.md files, using our posts as a source
@@ -20,11 +20,12 @@ main() {
     tags=$(find tmp/tags -type f -print0 | xargs -0 -I {} basename {} ".md")
     echo "$tags" | while read -r tag; do
         tag_count="$(wc -l < tmp/tags/"$tag".md | xargs)"
-        echo "- [$tag](tags/$tag.html) ($tag_count)" >> tmp/tags-unsorted.md
+        echo "$tag_count-=-- [$tag](tags/$tag.html) ($tag_count)" >> tmp/tags-unsorted.md
         tags_file=$(cat "tmp/tags/$tag.md")
         printf -- "---\ntitle: %s tags\n---\n\n%s" "$tag" "$tags_file" > "tmp/tags/$tag.md"
     done
-    sort tmp/tags-unsorted.md >> tmp/tags.md && rm tmp/tags-unsorted.md
+    sort -rn tmp/tags-unsorted.md | awk -F'-=-' '{ print $2 }'  > tmp/tags.md
+    rm tmp/tags-unsorted.md
 
     # Find all markdown files in out tmp directory and then turn them into
     # corresponding html in the dst path.
@@ -45,6 +46,7 @@ md_file_to_html_file() {
     pandoc \
         --css="/css/style.css" \
         --highlight-style zenburn \
+        --include-in-header src/_header.html \
         --include-before-body src/_top.html \
         --include-after-body src/_bottom.html \
         --title "$(config_for title)" \
@@ -90,7 +92,7 @@ generate_tmp_files() {
         echo "<item>
 <title>$(echo "$title" | xml_encode)</title>
 <link>$(config_for base_url)/$(echo "$dst_path" | xml_encode)</link>
-<pubDate>$(date -d "$post_date" -R)</pubDate>
+<pubDate>$(date_func -d "$post_date" -R)</pubDate>
 <guid>$(config_for base_url)/$(echo "$dst_path" | xml_encode)</guid>
 <description><![CDATA[$post_html_fragment]]></description>
 </item>" >> tmp/index.xml
@@ -112,10 +114,18 @@ generate_rss_feed() {
 <link>$(config_for base_url)</link>
 <description>$(config_for rss_description)</description>
 <generator>ssssg</generator>
-<lastBuildDate>$(date -R)</lastBuildDate>
+<lastBuildDate>$(date_func -R)</lastBuildDate>
 <atom:link href=\"$(config_for base_url)/index.xml\" rel=\"self\" type=\"application/rss+xml\"/>"
     cat tmp/index.xml
     echo "</channel></rss>"
+}
+
+date_func() {
+    if [ "$(uname)" = "Darwin" ]; then
+        gdate || echo "Please 'brew install coreutils'" && exit 1
+    else
+        date
+    fi
 }
 
 if [ $# -gt 0 ]; then
