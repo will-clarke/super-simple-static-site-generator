@@ -7,6 +7,7 @@
 
 main() {
     # Some housekeeping that's probably not 100% necessary
+
     rm -rf dst tmp && mkdir -p src/css src/posts \
         dst/posts dst/tags tmp/tags tmp/posts
     touch src/config.yaml src/_top.html src/_bottom.html src/_header.html
@@ -30,7 +31,7 @@ main() {
     # Find all markdown files in out tmp directory and then turn them into
     # corresponding html in the dst path.
     find src tmp -name "*.md" -type f ! -path 'src/posts/*' | while read -r file; do
-        html_dst_path="$(echo "$file" | sed 's/\(tmp\|src\)/dst/;s/\.md$/\.html/')"
+        html_dst_path="$(echo "$file" |  sed -e 's/src/dst/;s/tmp/dst/;s/\.md$/\.html/')"
         md_file_to_html_file "$file" > "$html_dst_path"
     done
 
