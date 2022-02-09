@@ -37,7 +37,7 @@ main() {
 
     generate_rss_feed > dst/index.xml
 
-    cp -r src/css/ dst/css/
+    cp -R src/css/. dst/css/.
 
     echo "Generated $(find dst | wc -l) files"
 }
