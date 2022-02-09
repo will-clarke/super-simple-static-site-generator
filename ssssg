@@ -25,7 +25,7 @@ main() {
         tags_file=$(cat "tmp/tags/$tag.md")
         printf -- "---\ntitle: %s tags\n---\n\n%s" "$tag" "$tags_file" > "tmp/tags/$tag.md"
     done
-    sort -rn tmp/tags-unsorted.md | awk -F'-=-' '{ print $2 }'  > tmp/tags.md
+    sort -rn tmp/tags-unsorted.md | awk -F'-=-' '{ print $2 }'  >> tmp/tags.md
     rm tmp/tags-unsorted.md
 
     # Find all markdown files in out tmp directory and then turn them into
