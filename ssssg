@@ -39,6 +39,14 @@ main() {
 
     cp -R src/css/. dst/css/.
 
+    # copy over the robots.txt file if there is one.
+    test -f src/robots.txt && cp src/robots.txt dst/robots.txt
+
+    # create a super-simple sitemap of all html files.
+    for file in dst/**/*.html; do
+        add_to_sitemap "$file"
+    done
+
     echo "Generated $(find dst | wc -l) files"
 }
 
@@ -119,6 +127,10 @@ generate_rss_feed() {
 <atom:link href=\"$(config_for base_url)/index.xml\" rel=\"self\" type=\"application/rss+xml\"/>"
     cat tmp/index.xml
     echo "</channel></rss>"
+}
+
+add_to_sitemap() {
+    echo "$1" | sed -e "s;dst;$(config_for base_url);" >> dst/sitemap.txt
 }
 
 date_func() {
