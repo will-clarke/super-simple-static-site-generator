@@ -10,11 +10,14 @@ main() {
     rm -rf dst tmp && mkdir -p src/css src/posts \
         dst/posts dst/tags tmp/tags tmp/posts
     find src -type d | sed 's/src/dst/' | xargs mkdir -p
-    touch src/config.yaml src/_top.html src/_bottom.html src/_header.html
+    # We expect the following files to exist. If they're not there, make blank ones.
+    touch src/config.yaml src/_top.html src/_bottom.html src/_header.html \
+        src/index.md src/posts.md src/tags
+    cp src/*md tmp/
 
     # Generate tmp/posts/*.md, tmp/index.md, tmp/posts.md, tmp/tags.md,
     # tmp/tags/example-tag.md files, using our posts as a source
-    find src/posts -type f -name "*.md" | sort -r | generate_tmp_files
+    find src/posts -type f -name "*.md" | sort -r | generate_tmp_posts_files
 
     # Generate tags.md file. Grab the list of tags from our tmp/tags directory,
     # then chuck them all into a tmp directory, which we then sort & pandoc-ise.
@@ -52,6 +55,7 @@ main() {
 
 md_file_to_html_file() {
     input_file="$1"
+    description=$(grep -iE '^description: ' "$1" | cut -d' ' -f 2-)
     pandoc \
         --css="/css/style.css" \
         --highlight-style zenburn \
@@ -59,17 +63,14 @@ md_file_to_html_file() {
         --include-before-body src/_top.html \
         --include-after-body src/_bottom.html \
         --title "$(config_for title)" \
+        --metadata "header-includes: <meta name=\"description\" content=\"$description\" />" \
         --to=html5  \
         "$input_file"
 }
 
 # Generate tmp/posts/*.md, tmp/index.md, tmp/posts.md, tmp/tags.md,
 # tmp/tags/example-tag.md files, using our posts as a source
-generate_tmp_files() {
-    # We initially load up some sane front-matter defaults for pandoc.
-    printf -- "---\ntitle: Home\n---\n\n%b\n\n---\n\n" "$(config_for index_md)" > tmp/index.md
-    printf -- "---\ntitle: Posts\n---\n" > tmp/posts.md
-    printf -- "---\ntitle: Tags\n---\n" > tmp/tags.md
+generate_tmp_posts_files() {
     # For every post, we want to:
     while read -r post_file_path; do
         # Assigning variables from the front-matter of the markdown post
