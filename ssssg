@@ -14,6 +14,7 @@ main() {
     touch src/config.yaml src/_top.html src/_bottom.html src/_header.html \
         src/index.md src/posts.md src/tags
     cp src/*md tmp/
+    cp src/*{html,txt} dst/
 
     # Generate tmp/posts/*.md, tmp/index.md, tmp/posts.md, tmp/tags.md,
     # tmp/tags/example-tag.md files, using our posts as a source
@@ -41,9 +42,6 @@ main() {
     generate_rss_feed > dst/index.xml
 
     cp -R src/css/. dst/css/.
-
-    # copy over the robots.txt file if there is one.
-    test -f src/robots.txt && cp src/robots.txt dst/robots.txt
 
     # create a super-simple sitemap of all html files.
     for file in dst/**/*.html; do
