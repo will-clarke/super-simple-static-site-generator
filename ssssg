@@ -14,7 +14,8 @@ main() {
     touch src/config.yaml src/_top.html src/_bottom.html src/_header.html \
         src/index.md src/posts.md src/tags
     cp src/*md tmp/
-    cp src/*{html,txt} dst/
+    cp src/*html dst/
+    cp src/*txt dst/
 
     # Generate tmp/posts/*.md, tmp/index.md, tmp/posts.md, tmp/tags.md,
     # tmp/tags/example-tag.md files, using our posts as a source
