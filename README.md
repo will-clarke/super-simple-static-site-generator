@@ -4,7 +4,7 @@ I took heavy inspiration for this script from [ssg](https://www.romanzolotarev.c
 
 ## Features:
 
-- 115 lines of fabulous shell script!
+- 150 lines of fabulous shell script!
 - Home page with a description of all posts
 - Post feed, archived by date
 - RSS Feed
